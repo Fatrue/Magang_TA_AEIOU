@@ -1,4 +1,4 @@
-## Struktur Repository
+## SRUKTUR REPOSITORY
 
 Web strukturnya kira2 gini entar:
 
@@ -52,9 +52,9 @@ brmp-irrigation/
 └── README.md
 ```
 
-## Workflow
+## WORKFLOW
 
-step" yang bakal dilakuin
+## Tahap Sekarang : A - ERD
 
 **Tahap A — Design final**
 
