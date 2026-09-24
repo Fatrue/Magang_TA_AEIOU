@@ -15,7 +15,7 @@
                  │ 1:N                        │ 1:N
                  ▼                            ▼
        ┌───────────────────┐        ┌────────────────┐
-       │ irrigation_sessions│        │   audit_logs   │
+       │irrigation_sessions│        │   audit_logs   │
        ├───────────────────┤        ├────────────────┤
        │ PK id             │        │ PK id          │
        │ request_id        │        │ FK user_id     │
