@@ -54,11 +54,11 @@ brmp-irrigation/
 
 ## WORKFLOW
 
-## Tahap Sekarang : A - ERD
+## Tahap Sekarang : A - Prisma
 
 **Tahap A — Design final**
 
-> ERD → Prisma → API contract → MQTT contract → state machine
+> ERD [✓] → Prisma → API contract → MQTT contract → state machine
 
 **Tahap B — Project setup**
 
