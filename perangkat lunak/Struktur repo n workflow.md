@@ -52,6 +52,20 @@ brmp-irrigation/
 └── README.md
 ```
 
+## Software/teknologi
+
+- **Visual Studio Code** — pengembangan kode
+- **React.js + Vite + TypeScript** — frontend
+- **Node.js + Express.js + TypeScript** — backend/API
+- **MySQL** — database
+- **Prisma ORM** — pengelolaan database
+- **Mosquitto MQTT** — komunikasi IoT
+- **Socket.IO** — komunikasi real-time web
+- **Git + GitHub** — version control
+- **Docker** — deployment/development environment
+- **Arduino IDE** / PlatformIO — pemrograman ESP32
+- **Postman** — pengujian API
+
 ## WORKFLOW
 
 ## Tahap Sekarang : A - Prisma
