@@ -72,7 +72,7 @@ brmp-irrigation/
 
 **Tahap A — Design final**
 
-> ERD [✓] → Prisma → API contract → MQTT contract → state machine
+> ERD [✓] → Prisma(& mysql) [] → API contract → MQTT contract → state machine
 
 **Tahap B — Project setup**
 
