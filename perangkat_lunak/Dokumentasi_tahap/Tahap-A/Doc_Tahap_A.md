@@ -2,4 +2,4 @@
 
 ## 1. ERD
 
-[gambaran ERD](perangkat_lunak/Dokumentasi_tahap/Tahap_A/ERD/ERD_kebutuhan DB.png)
+![gambaran ERD](Fatrue/Magang_TA_AEIOU/perangkat_lunak/Dokumentasi_tahap/Tahap-A/ERD/ERD_kebutuhan_DB.png)
