@@ -1,0 +1,10 @@
+{
+  "description": "Effortlessly manage and monitor an IoT irrigation system for garden maintenance staff, ensuring optimal watering schedules and real-time sensor data.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

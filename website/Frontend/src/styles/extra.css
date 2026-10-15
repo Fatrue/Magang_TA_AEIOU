@@ -1,0 +1,107 @@
+/* ===== Tambahan di atas desain Figma Make (jangan ubah index.css) ===== */
+
+/* Navigasi memakai <NavLink> (elemen <a>), jadi aturan <button> di index.css diulang untuk <a> */
+.nav-items a { color: #7c8e87; background: none; border: 0; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: 700; text-decoration: none; }
+.nav-items a svg { width: 21px; height: 21px; }
+.nav-items a.active { color: #1d6a4e; background: #eef7f2; }
+@media (min-width: 720px) {
+  .nav-items a { min-height: 49px; padding: 0 13px; flex-direction: row; justify-content: flex-start; gap: 12px; font-size: 12px; }
+}
+
+/* Menu "Lainnya" memakai <Link> */
+a.menu-card { text-decoration: none; }
+
+/* Komponen umum */
+.card { background: #fff; border: 1px solid #e2ebe6; border-radius: 20px; padding: 16px; box-shadow: 0 3px 13px rgba(26, 65, 51, .035); }
+.card-title { margin: 0 0 6px; font-size: 15px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid #edf1ef; font-size: 13px; }
+.row:last-child { border-bottom: 0; }
+.row > span { color: #6d8279; }
+.row > strong { color: #2b5545; text-align: right; }
+.hint { color: #6d8279; font-size: 12px; line-height: 1.6; margin: 10px 0; }
+.empty { text-align: center; color: #82948d; font-size: 13px; padding: 18px 0; }
+.link-button { border: 0; background: none; color: #1f7153; font-weight: 800; cursor: pointer; text-decoration: underline; font-size: inherit; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; color: #1f7153; font-weight: 800; font-size: 13px; text-decoration: none; margin-bottom: 4px; }
+.pill { display: inline-block; font-style: normal; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 800; margin-left: 6px; }
+.pill.ok { background: #e8f5ee; color: #247353; }
+.pill.warn { background: #fff1e4; color: #be6e2c; }
+.pill.bad { background: #fbe9e7; color: #a9433d; }
+
+/* Banner */
+.banner { padding: 12px 14px; border-radius: 14px; font-size: 13px; font-weight: 700; line-height: 1.5; }
+.banner.warn { background: #fff1e4; color: #a65a1f; border: 1px solid #f3d3b6; }
+.banner.bad { background: #fbe9e7; color: #a9433d; border: 1px solid #f0c9c4; }
+.banner.ok { background: #e8f5ee; color: #247353; border: 1px solid #cde9da; }
+.page-banner { margin: 12px 16px 0; }
+
+/* Beranda */
+.status-strip { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 16px; background: #fff; border: 1px solid #e2ebe6; border-radius: 16px; font-size: 13px; color: #6d8279; }
+.status-strip strong { color: #2b5545; }
+
+/* Kontrol */
+.mode-grid.two { grid-template-columns: repeat(2, 1fr); }
+.mode-card:disabled, .control-zone-grid button:disabled, .duration-grid button:disabled, .stop-button:disabled { opacity: .55; cursor: not-allowed; }
+.custom-duration { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.custom-duration input { width: 96px; padding: 12px 14px; border: 1px solid #cfe0d4; border-radius: 14px; font: inherit; font-weight: 700; font-size: 14px; }
+.custom-duration span { font-size: 12px; color: #6d8279; }
+.queue-list { padding: 14px 16px; border: 1px solid #dfe9e2; border-radius: 18px; background: #fff; font-size: 13px; }
+.queue-list ul { margin: 8px 0 0; padding-left: 18px; }
+.dialog-actions .primary-button { min-height: 48px; border-radius: 13px; font-size: 12px; box-shadow: none; }
+.notification-item > i.warn { background: #e98c42; }
+.notification-item > i.bad { background: #c6534b; }
+
+/* Lainnya */
+.account-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.account-card strong, .account-card small { display: block; }
+.account-card small { color: #82948d; font-size: 12px; margin-top: 2px; }
+.account-card .secondary-button { display: flex; align-items: center; gap: 8px; padding: 0 16px; }
+
+/* Grafik dan form */
+.metric-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.metric-tabs button { padding: 9px 12px; border-radius: 12px; border: 1px solid #dee7e3; background: #fff; color: #506c61; font-weight: 800; font-size: 12px; cursor: pointer; }
+.metric-tabs button.selected { background: #1f7153; color: #fff; border-color: #1f7153; }
+.chart-box { height: 260px; }
+.form-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 6px; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700; color: #3e5d51; }
+.field input { padding: 12px 14px; border: 1px solid #cfe0d4; border-radius: 14px; font: inherit; font-size: 14px; background: #fff; }
+.field input:disabled { background: #f2f5f3; color: #82948d; }
+.card .primary-button { width: 100%; margin-top: 10px; }
+
+/* Login */
+.login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+.login-card { width: min(100%, 380px); background: #fff; border: 1px solid #e2ebe6; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 12px 28px rgba(25, 88, 67, .08); }
+.login-card h1 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
+.login-sub { margin: -6px 0 4px; color: #72857e; font-size: 13px; }
+.login-hint { margin: 0; color: #6d8279; font-size: 12px; line-height: 1.6; }
+
+/* Titik status ikut warna. index.css selalu memberi titik hijau, sehingga tanpa aturan ini
+   header menampilkan titik hijau di samping tulisan "Sistem Offline". */
+.online.is-down i, .desktop-system.is-down i, .healthy.is-down i { background: #c6534b; box-shadow: 0 0 0 3px #fbe9e7; }
+.healthy.is-down { background: rgba(0, 0, 0, .12); }
+
+/* Kartu sensor saat data basi: angka diganti "—" di HomePage, kartunya diredupkan di sini. */
+.sensor-card.is-stale { background: #f1f4f3; border-color: #e4ebe8; }
+.sensor-card.is-stale .sensor-icon { background: #e8ece9; color: #9aa7a2; }
+.sensor-card.is-stale strong { color: #9aa7a2; }
+.sensor-card.is-stale small { color: #be6e2c; font-weight: 800; }
+
+/* Catatan di bawah input durasi */
+.field-note { margin: 8px 0 0; font-size: 12px; line-height: 1.5; color: #6d8279; }
+.field-note.adjusted { color: #a65a1f; font-weight: 700; }
+
+/* Antrean: tiap baris punya tombol Batalkan */
+.queue-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0; }
+.queue-list ul { list-style: none; padding-left: 0; }
+.queue-list .hint { margin-bottom: 0; }
+
+/* ===== Keterbacaan: beberapa teks di Figma 8-10px, terlalu kecil untuk dibaca di luar ruangan ===== */
+.section-kicker, .updated, .legend, .version, .step-heading p, .menu-card small { font-size: 11px; }
+.sensor-card p { font-size: 12px; }
+.sensor-card small, .zone-note, .start-panel > p, .menu-detail { font-size: 11px; }
+.zone-tile small, .mode-card small { font-size: 11px; }
+.mode-info p, .start-panel > div, .active-water-copy p { font-size: 12px; }
+.active-water-copy span, .notification-item small { font-size: 11px; }
+.notification-item p { font-size: 11px; }
+
+/* Blok ini bukan pilihan gaya. Teks 8-10px tidak terbaca di bawah sinar matahari langsung,
+   dan dashboard ini dipakai staf kebun di luar ruangan. Jangan dihapus sebelum diuji di lapangan. */
