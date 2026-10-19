@@ -124,7 +124,6 @@ export function ControlPage() {
               </li>
             ))}
           </ul>
-          <p className="hint">Membatalkan satu perintah tidak menghentikan penyiraman yang sedang berjalan. Tombol Stop menghentikan yang aktif <em>sekaligus</em> seluruh antrean (keputusan D5).</p>
         </div>
       )}
 
