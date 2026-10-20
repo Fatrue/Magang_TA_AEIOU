@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 import { Icon, type IconName } from "../components/Icon";
 import { useIrrigation } from "../context/IrrigationContext";
 import { ZONES, zoneLabel } from "../lib/zones";
-import { batteryState, formatRemaining, minutesAgo, modeLabel, moistureNote, num } from "../lib/format";
+import { formatRemaining, minutesAgo, modeLabel, moistureNote, num } from "../lib/format";
 
 export function HomePage() {
   const { status, sensors, remainingSec, sensorStale } = useIrrigation();
@@ -11,7 +11,6 @@ export function HomePage() {
   const active = status.active;
   const watering = active !== null;
   const age = minutesAgo(sensors.receivedAt);
-  const battery = batteryState(status.batteryVolt);
   const heroLabel = status.mode === "error" ? "GANGGUAN SISTEM" : status.mode === "manual" ? "MODE MANUAL" : "SISTEM OTOMATIS";
 
   const sensorCards: { label: string; value: string; note: string; icon: IconName; tone: string }[] = [
@@ -43,7 +42,6 @@ export function HomePage() {
 
       <div className="status-strip">
         <span>Mode <strong>{modeLabel(status.mode)}</strong></span>
-        <span>Baterai <strong>{num(status.batteryVolt, 1, " V")}</strong> <em className={`pill ${battery.tone}`}>{battery.label}</em></span>
         <span>Antrean <strong>{status.queue.length}</strong></span>
       </div>
 
