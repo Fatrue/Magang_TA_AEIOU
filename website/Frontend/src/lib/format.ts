@@ -30,21 +30,4 @@ export const minutesAgo = (iso: string) => Math.max(0, Math.floor((Date.now() - 
 // Kalau backend sudah mengirim label hasil derajat keanggotaan tertinggi, pakai itu dan hapus fungsi ini.
 export const moistureNote = (v: number | null) => (v === null ? "Tidak ada data" : v < 25 ? "Kering" : v <= 60 ? "Cukup lembap" : "Basah");
 
-// LiFePO4 12.8 V: rentang kerja wajar 10.0-14.6 V, normal di atas 12.5 V (PRD 15.3).
-// Kurva LiFePO4 sangat datar, jadi persen dari tegangan tidak andal - tampilkan Volt saja.
-export const BATTERY_MIN_V = 10.0;
-export const BATTERY_MAX_V = 14.6;
-export const BATTERY_OK_V = 12.5;
-
-export type BatteryStatus = "unknown" | "ok" | "low" | "invalid";
-
-// "invalid" penting: PRD 13.1/14.3 sendiri menulis 4.2 V (angka Li-ion sel tunggal, bukan LiFePO4).
-// Kalau firmware ikut salah, UI harus menandainya, bukan menampilkannya seolah wajar.
-export const batteryState = (v: number | null): { status: BatteryStatus; label: string; tone: "ok" | "warn" | "bad" } => {
-  if (v === null) return { status: "unknown", label: "Tidak ada data", tone: "warn" };
-  if (v < BATTERY_MIN_V || v > BATTERY_MAX_V) return { status: "invalid", label: "Nilai tidak wajar", tone: "bad" };
-  if (v >= BATTERY_OK_V) return { status: "ok", label: "Normal", tone: "ok" };
-  return { status: "low", label: "Rendah", tone: "warn" };
-};
-
 export const modeLabel = (m: SystemMode) => (m === "auto" ? "Otomatis" : m === "manual" ? "Manual" : "Error");
