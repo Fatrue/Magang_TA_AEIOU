@@ -51,7 +51,6 @@ export interface SystemStatus {
   active: ActiveWatering | null;
   queue: QueueItem[];
   nextSchedule: string | null; // "16:00"
-  batteryVolt: number | null;
   uptimeSec: number | null;
   wifiRssi: number | null; // dBm
   lastError: string | null;
@@ -73,13 +72,8 @@ export interface ErrorLogEntry {
 }
 
 export interface ScheduleSettings {
-  morning: string; // "08:00"
-  evening: string; // "16:00"
-}
-
-export interface Calibration {
-  tempOffset: number; // actual_temp = sensor_temp + tempOffset (PRD 15.2)
-  humidityOffset: number;
+  first: string;  // jadwal siram pertama, "08:00"
+  second: string; // jadwal siram kedua, "16:00"
 }
 
 export interface WateringCommand {
@@ -96,8 +90,6 @@ export interface IrrigationApi {
   getErrors(limit?: number): Promise<ErrorLogEntry[]>;
   getSchedule(): Promise<ScheduleSettings>;
   saveSchedule(s: ScheduleSettings): Promise<void>;
-  getCalibration(): Promise<Calibration>;
-  saveCalibration(c: Calibration): Promise<void>;
   startWatering(cmd: WateringCommand): Promise<void>;
   stopWatering(): Promise<void>;
   cancelQueued(id: string): Promise<void>;
