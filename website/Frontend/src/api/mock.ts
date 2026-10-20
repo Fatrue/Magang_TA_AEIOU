@@ -18,7 +18,7 @@ let nextQueueId = 1;
 
 // Gangguan yang bisa dinyalakan dari Console browser. Tanpa ini, mode tiruan selalu
 // "sehat" sehingga banner offline/error/data-basi tidak pernah bisa dilihat atau diuji.
-const fault = { offline: false, error: null as string | null, staleMin: 0, batteryVolt: 12.9 as number | null };
+const fault = { offline: false, error: null as string | null, staleMin: 0 };
 const errors: ErrorLogEntry[] = [{ id: 1, at: new Date(bootTime - 3 * 3600_000).toISOString(), message: "Sensor timeout (contoh data)" }];
 let schedule: ScheduleSettings = { morning: "08:00", evening: "16:00" };
 let calibration: Calibration = { tempOffset: 0, humidityOffset: 0 };
@@ -68,7 +68,7 @@ export const mockApi: IrrigationApi = {
       mode: fault.error ? "error" : mode,
       active: active && { ...active },
       queue: [...queue],
-      nextSchedule: nextScheduleTime(), batteryVolt: fault.batteryVolt,
+      nextSchedule: nextScheduleTime(),
       uptimeSec: Math.floor((Date.now() - bootTime) / 1000), wifiRssi: fault.offline ? null : -58,
       lastError: fault.error,
     };
@@ -132,8 +132,7 @@ if (import.meta.env.DEV) {
     offline: (on = true) => { fault.offline = on; emit(); },
     error: (msg: string | null = "Valve timeout (simulasi)") => { fault.error = msg; emit(); },
     stale: (minutes = 20) => { fault.staleMin = minutes; emit(); },
-    battery: (v: number | null = 12.1) => { fault.batteryVolt = v; emit(); },
-    reset: () => { fault.offline = false; fault.error = null; fault.staleMin = 0; fault.batteryVolt = 12.9; emit(); },
+    reset: () => { fault.offline = false; fault.error = null; fault.staleMin = 0; emit(); },
   };
-  console.info("[mock] Simulasi gangguan: mock.offline() · mock.error() · mock.stale(20) · mock.battery(12.1) · mock.battery(4.2) · mock.reset()");
+  console.info("[mock] Simulasi gangguan: mock.offline() · mock.error() · mock.stale(20) · mock.reset()");
 }
