@@ -2,12 +2,11 @@ import { api } from "../api";
 import { PageHeader } from "../components/PageHeader";
 import { useIrrigation } from "../context/IrrigationContext";
 import { useAsync } from "../hooks/useAsync";
-import { batteryState, formatDateTime, formatUptime, modeLabel, num } from "../lib/format";
+import { formatDateTime, formatUptime, modeLabel, num } from "../lib/format";
 
 export function SystemPage() {
   const { status } = useIrrigation();
   const errors = useAsync(() => api.getErrors(50), []);
-  const battery = batteryState(status.batteryVolt);
 
   return (
     <main className="page">
@@ -16,7 +15,6 @@ export function SystemPage() {
       <section className="card">
         <div className="row"><span>Controller</span><strong><em className={`pill ${status.online ? "ok" : "bad"}`}>{status.online ? "Online" : "Offline"}</em></strong></div>
         <div className="row"><span>Mode</span><strong>{modeLabel(status.mode)}</strong></div>
-        <div className="row"><span>Baterai</span><strong>{num(status.batteryVolt, 1, " V")} <em className={`pill ${battery.tone}`}>{battery.label}</em></strong></div>
         <div className="row"><span>Uptime</span><strong>{formatUptime(status.uptimeSec)}</strong></div>
         <div className="row"><span>Sinyal WiFi</span><strong>{status.wifiRssi === null ? "—" : `${status.wifiRssi} dBm`}</strong></div>
         <div className="row"><span>Jadwal berikutnya</span><strong>{status.nextSchedule ?? "—"}</strong></div>
