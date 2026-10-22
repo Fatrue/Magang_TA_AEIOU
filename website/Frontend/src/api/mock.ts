@@ -1,5 +1,5 @@
 import type {
-  ActiveWatering, Calibration, ControlMode, ErrorLogEntry, HistoryEntry, IrrigationApi,
+  ActiveWatering, ControlMode, ErrorLogEntry, HistoryEntry, IrrigationApi,
   QueueItem, ScheduleSettings, SensorPoint, WateringSource,
 } from "../types";
 import { MAX_WATERING_MIN, ZONE_COUNT } from "../lib/zones";
@@ -18,11 +18,10 @@ let nextQueueId = 1;
 
 // Gangguan yang bisa dinyalakan dari Console browser. Tanpa ini, mode tiruan selalu
 // "sehat" sehingga banner offline/error/data-basi tidak pernah bisa dilihat atau diuji.
-const fault = { offline: false, error: null as string | null, staleMin: 0 };
+const fault = { offline: false, error: null as string | null, staleMin: 0, batteryVolt: 12.9 as number | null };
 const errors: ErrorLogEntry[] = [{ id: 1, at: new Date(bootTime - 3 * 3600_000).toISOString(), message: "Sensor timeout (contoh data)" }];
-let schedule: ScheduleSettings = { morning: "08:00", evening: "16:00" };
-let calibration: Calibration = { tempOffset: 0, humidityOffset: 0 };
-
+let schedule: ScheduleSettings = { first: "08:00", second: "16:00" };
+//
 function begin(zone: number, durationMin: number, source: WateringSource) {
   active = { zone, startedAt: new Date().toISOString(), durationSec: durationMin * 60, source };
 }
@@ -48,7 +47,7 @@ setInterval(() => {
 function nextScheduleTime(): string {
   const now = new Date();
   const cur = now.getHours() * 60 + now.getMinutes();
-  const list = [schedule.morning, schedule.evening]
+  const list = [schedule.first, schedule.second]
     .map((t) => { const [h, m] = t.split(":").map(Number); return { t, v: h * 60 + m }; })
     .sort((a, b) => a.v - b.v);
   return (list.find((x) => x.v > cur) ?? list[0]).t;
@@ -68,7 +67,7 @@ export const mockApi: IrrigationApi = {
       mode: fault.error ? "error" : mode,
       active: active && { ...active },
       queue: [...queue],
-      nextSchedule: nextScheduleTime(),
+      nextSchedule: nextScheduleTime(), batteryVolt: fault.batteryVolt,
       uptimeSec: Math.floor((Date.now() - bootTime) / 1000), wifiRssi: fault.offline ? null : -58,
       lastError: fault.error,
     };
@@ -100,8 +99,6 @@ export const mockApi: IrrigationApi = {
   async getErrors(limit = 50) { return errors.slice(0, limit); },
   async getSchedule() { return { ...schedule }; },
   async saveSchedule(s) { schedule = { ...s }; emit(); },
-  async getCalibration() { return { ...calibration }; },
-  async saveCalibration(c) { calibration = { ...c }; emit(); },
   async startWatering({ zone, durationMin }) {
     if (zone < 1 || zone > ZONE_COUNT || durationMin < 1 || durationMin > MAX_WATERING_MIN) throw new Error("Perintah tidak valid");
     if (fault.offline) throw new Error("Controller offline, perintah tidak terkirim");
@@ -132,7 +129,8 @@ if (import.meta.env.DEV) {
     offline: (on = true) => { fault.offline = on; emit(); },
     error: (msg: string | null = "Valve timeout (simulasi)") => { fault.error = msg; emit(); },
     stale: (minutes = 20) => { fault.staleMin = minutes; emit(); },
-    reset: () => { fault.offline = false; fault.error = null; fault.staleMin = 0; emit(); },
+    battery: (v: number | null = 12.1) => { fault.batteryVolt = v; emit(); },
+    reset: () => { fault.offline = false; fault.error = null; fault.staleMin = 0; fault.batteryVolt = 12.9; emit(); },
   };
-  console.info("[mock] Simulasi gangguan: mock.offline() · mock.error() · mock.stale(20) · mock.reset()");
+  console.info("[mock] Simulasi gangguan: mock.offline() · mock.error() · mock.stale(20) · mock.battery(12.1) · mock.battery(4.2) · mock.reset()");
 }

@@ -51,6 +51,7 @@ export interface SystemStatus {
   active: ActiveWatering | null;
   queue: QueueItem[];
   nextSchedule: string | null; // "16:00"
+  batteryVolt: number | null;
   uptimeSec: number | null;
   wifiRssi: number | null; // dBm
   lastError: string | null;

@@ -1,5 +1,4 @@
 import type { SystemStatus } from "../types";
-import { batteryState } from "./format";
 
 export interface AppAlert {
   id: string;

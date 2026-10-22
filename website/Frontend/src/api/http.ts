@@ -49,8 +49,6 @@ export const httpApi: IrrigationApi = {
   getErrors: (limit = 50) => req(`/api/errors?limit=${limit}`),
   getSchedule: () => req("/api/schedule"),
   saveSchedule: (s) => req("/api/schedule", { method: "PUT", ...json(s) }),
-  getCalibration: () => req("/api/calibration"),
-  saveCalibration: (c) => req("/api/calibration", { method: "PUT", ...json(c) }),
   startWatering: (cmd) => req("/api/watering", { method: "POST", ...json(cmd) }),
   stopWatering: () => req("/api/watering/stop", { method: "POST" }),
   cancelQueued: (id) => req(`/api/watering/queue/${encodeURIComponent(id)}`, { method: "DELETE" }),

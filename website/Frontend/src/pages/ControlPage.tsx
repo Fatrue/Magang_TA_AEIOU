@@ -5,6 +5,7 @@ import { ConfirmDialog } from "../components/ConfirmDialog";
 import { Icon, type IconName } from "../components/Icon";
 import { useAuth } from "../context/AuthContext";
 import { useIrrigation } from "../context/IrrigationContext";
+import { useAsync } from "../hooks/useAsync";
 import { formatRemaining } from "../lib/format";
 import { MAX_WATERING_MIN, ZONES, zoneLabel } from "../lib/zones";
 import type { ControlMode } from "../types";
@@ -13,8 +14,8 @@ const PRESETS = [5, 10, 15, 20];
 const clampMin = (n: number) => Math.min(MAX_WATERING_MIN, Math.max(1, Math.round(n) || 1));
 
 const modes: { id: ControlMode; name: string; detail: string; icon: IconName }[] = [
-  { id: "auto", name: "Otomatis", detail: "Jadwal 08:00 & 16:00 + fuzzy", icon: "leaf" },
-  { id: "manual", name: "Manual", detail: "Pilih zona & durasi", icon: "control" },
+  { id: "auto", name: "Otomatis", detail: "Siram otomatis sesuai jadwal penyiraman yang sudah ditentukan", icon: "leaf" },
+  { id: "manual", name: "Manual", detail: "Pilih zona dan durasi penyiraman", icon: "control" },
 ];
 
 export function ControlPage() {
@@ -32,6 +33,9 @@ export function ControlPage() {
   const locked = !canControl || mode === "error" || !status.online;
   const durationMin = preset === "custom" ? clampMin(Number(customText)) : preset;
   const modeName = modes.find((m) => m.id === mode)?.name ?? "";
+  // Jam diambil dari jadwal yang tersimpan, bukan ditulis tetap, agar teksnya
+  // ikut berubah saat jadwal diubah di Lainnya > Jadwal.
+  const schedule = useAsync(() => api.getSchedule(), []);
   // Nilai di luar 1-30 dibetulkan diam-diam oleh clampMin. Beri tahu operator, jangan hanya diperbaiki.
   const customAdjusted = preset === "custom" && customText.trim() !== "" && Number(customText) !== durationMin;
 
@@ -110,7 +114,7 @@ export function ControlPage() {
           </div>
         </div>
       ) : (
-        <div className="mode-info"><span className="sensor-icon green"><Icon name="leaf" /></span><div><strong>Mode {modeName || "—"} aktif</strong><p>Pada jam terjadwal sistem membaca sensor, lalu logika fuzzy memutuskan perlu tidaknya menyiram. Jadwal tidak memaksa penyiraman.</p></div></div>
+        <div className="mode-info"><span className="sensor-icon green"><Icon name="leaf" /></span><div><strong>Mode {modeName || "—"} aktif</strong><p>Penyiraman otomatis akan dilakukan pada {schedule.data ? `${schedule.data.first} dan ${schedule.data.second}` : "jadwal siram pertama dan kedua"}.</p></div></div>
       )}
 
       {status.queue.length > 0 && (
@@ -124,6 +128,7 @@ export function ControlPage() {
               </li>
             ))}
           </ul>
+          <p className="hint">Membatalkan satu perintah tidak menghentikan penyiraman yang sedang berjalan. Tombol Stop menghentikan yang aktif <em>sekaligus</em> seluruh antrean (keputusan D5).</p>
         </div>
       )}
 

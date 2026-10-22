@@ -8,7 +8,6 @@ import { LoginPage } from "./pages/LoginPage";
 import { MorePage } from "./pages/MorePage";
 import { SchedulePage } from "./pages/SchedulePage";
 import { SensorPage } from "./pages/SensorPage";
-import { SettingsPage } from "./pages/SettingsPage";
 import { SystemPage } from "./pages/SystemPage";
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
           <Route path="lainnya/jadwal" element={<SchedulePage />} />
           <Route path="lainnya/riwayat" element={<HistoryPage />} />
           <Route path="lainnya/sistem" element={<SystemPage />} />
-          <Route path="lainnya/pengaturan" element={<SettingsPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -35,7 +35,7 @@ a.menu-card { text-decoration: none; }
 .page-banner { margin: 12px 16px 0; }
 
 /* Beranda */
-.status-strip { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 16px; background: #fff; border: 1px solid #e2ebe6; border-radius: 16px; font-size: 13px; color: #6d8279; }
+.status-strip { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 16px; background: #fff; border: 1px solid #e2ebe6; border-radius: 16px; font-size: 15px; color: #6d8279; }
 .status-strip strong { color: #2b5545; }
 
 /* Kontrol */
@@ -105,3 +105,168 @@ a.menu-card { text-decoration: none; }
 
 /* Blok ini bukan pilihan gaya. Teks 8-10px tidak terbaca di bawah sinar matahari langsung,
    dan dashboard ini dipakai staf kebun di luar ruangan. Jangan dihapus sebelum diuji di lapangan. */
+/* ===== Perbaikan responsif (hasil audit 360-1920px) ===== */
+
+/* Sidebar desktop terlewat dari blok keterbacaan di atas: dua teks ini
+   masih 8-9px dan hanya muncul pada lebar >= 720px. */
+.desktop-nav-brand small { font-size: 11px; }
+.desktop-system { font-size: 11px; }
+
+/* Target sentuh minimal 44x44px (ukuran ujung jari orang dewasa).
+   Tiga elemen di halaman Sensor masih di bawahnya. */
+.metric-tabs button { min-height: 44px; }
+.back-link { min-height: 44px; }
+.queue-list .link-button { min-height: 44px; padding: 0 8px; }
+
+
+/* =========================================================================
+   LEBAR KOLOM — menyamakan Kontrol & Lainnya dengan Beranda
+   =========================================================================
+   index.css membatasi kedua halaman ini jauh lebih sempit daripada Beranda,
+   dan ratanya ke KIRI, bukan tengah:
+     .control-page > section  max-width 800px
+     .mode-grid               max-width 660px
+     .more-page               max-width 850px  + margin-left: 0
+   Di layar 1920px, Beranda memakai 1160px sementara Kontrol hanya 800px,
+   menyisakan ~360px kosong yang menumpuk di satu sisi. Itu yang terasa timpang.
+   Di bawah ini ketiganya dilepas agar memakai kolom 1160px yang sama,
+   yang sudah di-center oleh `.page { margin: 0 auto }`. */
+@media (min-width: 720px) {
+  /* Kolom 980px, di-center. Bukan 1160px penuh: kalau selebar itu, ruang
+     kosongnya cuma pindah ke DALAM kartu (kartu mode jadi melar dan kosong
+     di tengahnya), dan tombol selebar 1160px terlihat janggal. */
+  .control-page > section:not(.active-watering-card),
+  .manual-panel,
+  .mode-info,
+  .control-page > .page-title,
+  .control-page > .banner,
+  .queue-list { max-width: 980px; width: 100%; margin-left: auto; margin-right: auto; }
+  .mode-grid { max-width: none; }
+  .more-page { max-width: 980px; margin-left: auto; margin-right: auto; }
+
+  /* Kartu mode jadi mendatar: ikon, judul, keterangan dalam satu baris.
+     Versi tegak setinggi 130px menyisakan area kosong besar begitu kartunya
+     melebar - masalah yang sama, hanya pindah tempat. */
+  .mode-card { flex-direction: row; align-items: center; gap: 14px; min-height: 86px; padding: 16px 20px; text-align: left; }
+  .mode-card.selected { padding: 15px 19px; }
+  .mode-card .mode-icon { margin-bottom: 0; flex: 0 0 auto; }
+  .mode-card small { margin-top: 0; }
+
+  /* Panel "Siap menyiram" jadi satu baris: keterangan di kiri, tombol di kanan.
+     Susunan bertumpuk menyisakan pita kosong selebar panel di sebelah tombol. */
+  .start-panel { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+  .start-panel > div { flex: 1 1 260px; margin-bottom: 0; }
+  .start-panel .primary-button { width: auto; flex: 0 0 auto; min-width: 300px; }
+  .start-panel > p { flex: 1 1 100%; margin: 0; text-align: left; }
+}
+
+
+/* =========================================================================
+   UKURAN TEKS — dinaikkan menyeluruh agar terbaca di lapangan
+   =========================================================================
+   Desain Figma memakai 8-13px untuk hampir semua teks. Blok ini menaikkannya
+   sekitar 2-4px. Nilai di sini menang atas index.css karena extra.css
+   diimpor setelahnya di main.tsx. */
+
+/* Header & navigasi */
+.brand-copy h1 { font-size: 19px; }
+.online, .desktop-system { font-size: 13px; }
+.desktop-nav-brand strong { font-size: 16px; }
+.desktop-nav-brand small { font-size: 12px; }
+.nav-items a { font-size: 13px; }
+
+/* Judul seksi & halaman */
+.section-kicker { font-size: 12px; }
+.section-heading h2 { font-size: 23px; }
+.page-title h2 { font-size: 28px; }
+.page-title p { font-size: 15px; }
+.updated { font-size: 13px; }
+
+/* Kartu hero */
+.hero-topline { font-size: 13px; }
+.hero-main .eyebrow { font-size: 13px; }
+.hero-main h2 { font-size: 34px; }
+.hero-main p:last-child { font-size: 15px; }
+.hero-footer { font-size: 13px; }
+.hero-footer strong { font-size: 15px; }
+
+/* Kartu sensor */
+.sensor-card p { font-size: 14px; }
+.sensor-card strong { font-size: 24px; }
+.sensor-card small { font-size: 13px; }
+
+/* Zona */
+.legend { font-size: 13px; }
+.zone-tile { min-height: 66px; }
+.zone-tile span { font-size: 15px; }
+.zone-tile small { font-size: 12px; }
+.zone-note { font-size: 13px; }
+
+/* Tombol */
+.primary-button { font-size: 15px; }
+.secondary-button, .danger-button, .stop-button { font-size: 14px; }
+
+/* Halaman Kontrol */
+.step-heading > span { font-size: 14px; }
+.step-heading h3 { font-size: 17px; }
+.step-heading p { font-size: 13px; }
+.mode-card strong { font-size: 14px; }
+.mode-card small { font-size: 12px; }
+.control-zone-grid button, .duration-grid button { font-size: 14px; min-height: 54px; }
+.start-panel > div { font-size: 14px; }
+.start-panel > div strong { font-size: 15px; }
+.start-panel > p { font-size: 13px; }
+.mode-info strong { font-size: 15px; }
+.mode-info p { font-size: 14px; }
+.active-water-copy span { font-size: 12px; }
+.active-water-copy h2 { font-size: 24px; }
+.active-water-copy p { font-size: 14px; }
+
+/* Halaman Lainnya */
+.system-summary strong { font-size: 15px; }
+.system-summary p { font-size: 13px; }
+.healthy { font-size: 13px; }
+.menu-card strong { font-size: 15px; }
+.menu-card small { font-size: 13px; }
+.version { font-size: 12px; }
+
+/* Dialog & notifikasi */
+.dialog h2 { font-size: 22px; }
+.dialog > p { font-size: 14px; }
+.notification-item strong { font-size: 14px; }
+.notification-item p { font-size: 13px; }
+.notification-item small { font-size: 12px; }
+
+/* Komponen dari extra.css */
+.card-title { font-size: 17px; }
+.row { font-size: 15px; }
+.hint, .field-note { font-size: 14px; }
+.empty { font-size: 15px; }
+.back-link { font-size: 15px; }
+.pill { font-size: 13px; }
+.banner { font-size: 15px; }
+.status-strip { font-size: 15px; }
+.queue-list { font-size: 15px; }
+.account-card small { font-size: 14px; }
+.metric-tabs button { font-size: 14px; }
+.custom-duration span { font-size: 14px; }
+.field { font-size: 14px; }
+.login-card h1 { font-size: 25px; }
+.login-sub { font-size: 15px; }
+.login-hint { font-size: 14px; }
+
+/* Input WAJIB >= 16px. Di bawah itu, Safari iOS otomatis memperbesar
+   seluruh halaman saat kolom disentuh, dan tata letaknya jadi berantakan. */
+.field input, .custom-duration input { font-size: 16px; }
+
+@media (min-width: 1050px) {
+  .hero-main h2 { font-size: 42px; }
+  .sensor-card strong { font-size: 28px; }
+}
+
+/* Di 720-899px, grid sensor 4 kolom terlalu sempit untuk angka yang sudah
+   dibesarkan - kartunya meluber beberapa piksel dan memunculkan scroll
+   horizontal. Tahan di 2 kolom sampai ada ruang cukup. */
+@media (min-width: 720px) and (max-width: 899px) {
+  .sensor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
