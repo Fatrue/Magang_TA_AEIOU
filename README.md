@@ -4,7 +4,7 @@ Magang
 |||
 |--------------------|----------------------------|
 | Pembimbing lapang | Ibu Chery Soraya Ammatillah., SP., M.Si |
-| Tipe tugas akhir | prototipe fisik(?) |
+| Tipe tugas akhir | prototipe fisik |
 | Judul | Rancang Bangun Sistem Kontrol Irigasi Berbasis IoT untuk Optimasi Tekanan Air di Halaman BRMP Jakarta |
 | kajian | Sistem Kontrol dan Monitoring Penyiraman Tanaman |
 
