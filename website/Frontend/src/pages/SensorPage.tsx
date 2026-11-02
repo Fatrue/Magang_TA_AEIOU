@@ -35,11 +35,8 @@ export function SensorPage() {
 
       <section className="card">
         <div className="row"><span>Kelembapan tanah</span><strong>{num(sensors.soilMoisture, 1, "%")} · {moistureNote(sensors.soilMoisture)}</strong></div>
-        <div className="row"><span>Suhu tanah</span><strong>{num(sensors.soilTemp, 1, "°C")}</strong></div>
         <div className="row"><span>Suhu udara</span><strong>{num(sensors.airTemp, 1, "°C")}</strong></div>
         <div className="row"><span>Kelembapan udara</span><strong>{num(sensors.airHumidity, 1, "%")}</strong></div>
-        <div className="row"><span>pH tanah</span><strong>{num(sensors.ph, 1)}</strong></div>
-        <div className="row"><span>EC tanah</span><strong>{num(sensors.ec, 2, " mS/cm")}</strong></div>
         <div className="row"><span>Data diterima</span><strong>{formatDateTime(sensors.receivedAt)}</strong></div>
       </section>
     </main>

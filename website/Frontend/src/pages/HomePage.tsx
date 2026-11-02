@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 import { Icon, type IconName } from "../components/Icon";
 import { useIrrigation } from "../context/IrrigationContext";
 import { ZONES, zoneLabel } from "../lib/zones";
-import { formatRemaining, minutesAgo, modeLabel, moistureNote, num } from "../lib/format";
+import { airHumidityNote, airTempNote, formatRemaining, minutesAgo, modeLabel, moistureNote, num } from "../lib/format";
 
 export function HomePage() {
   const { status, sensors, remainingSec, sensorStale } = useIrrigation();
@@ -15,9 +15,8 @@ export function HomePage() {
 
   const sensorCards: { label: string; value: string; note: string; icon: IconName; tone: string }[] = [
     { label: "Kelembapan Tanah", value: num(sensors.soilMoisture, 0, "%"), note: moistureNote(sensors.soilMoisture), icon: "droplet", tone: "green" },
-    { label: "Suhu Tanah", value: num(sensors.soilTemp, 1, "°C"), note: "Suhu tanah", icon: "thermometer", tone: "orange" },
-    { label: "Suhu Udara", value: num(sensors.airTemp, 0, "°C"), note: "Suhu udara", icon: "sun", tone: "orange" },
-    { label: "Kelembapan Udara", value: num(sensors.airHumidity, 0, "%"), note: "Kelembapan relatif", icon: "humidity", tone: "blue" },
+    { label: "Suhu Udara", value: num(sensors.airTemp, 0, "°C"), note: airTempNote(sensors.airTemp), icon: "sun", tone: "orange" },
+    { label: "Kelembapan Udara", value: num(sensors.airHumidity, 0, "%"), note: airHumidityNote(sensors.airHumidity), icon: "humidity", tone: "blue" },
   ];
 
   return (

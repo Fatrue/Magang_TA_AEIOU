@@ -9,7 +9,6 @@ const menuItems: { to: string; title: string; detail: string; icon: IconName; to
   { to: "/lainnya/jadwal", title: "Jadwal", detail: "Atur jam evaluasi penyiraman", icon: "calendar", tone: "blue" },
   { to: "/lainnya/riwayat", title: "Riwayat", detail: "Riwayat penyiraman per zona", icon: "history", tone: "purple" },
   { to: "/lainnya/sistem", title: "Sistem & Error", detail: "Status perangkat dan log gangguan", icon: "alert", tone: "orange" },
-  { to: "/lainnya/pengaturan", title: "Pengaturan", detail: "Kalibrasi sensor dan parameter", icon: "settings", tone: "gray" },
 ];
 
 export function MorePage() {

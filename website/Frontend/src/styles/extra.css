@@ -270,3 +270,10 @@ a.menu-card { text-decoration: none; }
 @media (min-width: 720px) and (max-width: 899px) {
   .sensor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+
+.sensor-grid { grid-template-columns: 1fr; }
+
+@media (min-width: 640px) {
+  .sensor-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
