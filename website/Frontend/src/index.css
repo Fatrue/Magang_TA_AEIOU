@@ -32,8 +32,12 @@ button:focus-visible { outline: 3px solid rgba(31, 113, 83, .25); outline-offset
 .hero-main .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #b5d7ca; font-weight: 700; margin: 0 0 3px; }
 .hero-main h2 { font-size: 30px; margin: 0; line-height: 1.1; letter-spacing: -.04em; }
 .hero-main p:last-child { margin: 5px 0 0; color: #d3e8e0; font-size: 13px; }
-.hero-footer { position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,.13); padding-top: 15px; display: flex; align-items: center; gap: 8px; color: #cce2d9; font-size: 11px; }
-.hero-footer strong { margin-left: auto; color: white; font-size: 13px; }
+.hero-card.is-offline { background: #8e3030; box-shadow: 0 12px 28px rgba(142,48,48,.18); }
+.hero-card.is-offline .hero-topline,
+.hero-card.is-offline .hero-main .eyebrow,
+.hero-card.is-offline .hero-main p:last-child,
+.hero-card.is-offline .water-pulse { color: #ffe1e1; }
+.hero-card.is-offline .hero-topline i { background: #ffb5b5; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 13px; }
 .section-kicker { color: #73877f; text-transform: uppercase; letter-spacing: .09em; font-size: 9px; font-weight: 800; }
 .section-heading h2, .page-title h2 { margin: 2px 0 0; font-size: 20px; line-height: 1.2; letter-spacing: -.03em; }

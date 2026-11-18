@@ -78,7 +78,8 @@ export interface ScheduleSettings {
 }
 
 export interface WateringCommand {
-  zone: number;
+  // Tanpa zone, siram seluruh jalur secara berurutan.
+  zone?: number;
   durationMin: number;
 }
 
@@ -94,6 +95,7 @@ export interface IrrigationApi {
   startWatering(cmd: WateringCommand): Promise<void>;
   stopWatering(): Promise<void>;
   cancelQueued(id: string): Promise<void>;
+  cancelAllQueued(): Promise<void>;
   setMode(mode: ControlMode): Promise<void>;
   subscribe(onChange: () => void): () => void; // mengembalikan fungsi unsubscribe
 }

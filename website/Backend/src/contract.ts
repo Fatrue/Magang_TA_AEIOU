@@ -80,4 +80,8 @@ export interface ScheduleSettings {
 }
 
 export const ZONE_COUNT = 13;
-export const MAX_WATERING_MIN = 30;
+export const MAX_WATERING_MIN = 5;
+export const MIN_WATERING_MIN = 0.5;
+export const validManualDuration = (minutes: number) =>
+  Number.isFinite(minutes) && minutes >= MIN_WATERING_MIN && minutes <= MAX_WATERING_MIN &&
+  Math.abs(minutes * 60 - Math.round(minutes * 60)) < 0.000001;

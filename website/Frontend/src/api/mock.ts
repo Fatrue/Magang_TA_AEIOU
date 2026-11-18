@@ -2,7 +2,7 @@ import type {
   ActiveWatering, ControlMode, ErrorLogEntry, HistoryEntry, IrrigationApi,
   QueueItem, ScheduleSettings, SensorPoint, WateringSource,
 } from "../types";
-import { MAX_WATERING_MIN, ZONE_COUNT } from "../lib/zones";
+import { MAX_WATERING_SEC, MIN_WATERING_SEC, ZONES } from "../lib/zones";
 
 // Server tiruan di memori. Hilang saat halaman di-refresh (normal).
 const bootTime = Date.now();
@@ -23,14 +23,14 @@ const errors: ErrorLogEntry[] = [{ id: 1, at: new Date(bootTime - 3 * 3600_000).
 let schedule: ScheduleSettings = { first: "08:00", second: "16:00" };
 //
 function begin(zone: number, durationMin: number, source: WateringSource) {
-  active = { zone, startedAt: new Date().toISOString(), durationSec: durationMin * 60, source };
+  active = { zone, startedAt: new Date().toISOString(), durationSec: Math.round(durationMin * 60), source };
 }
 
 function finish(result: HistoryEntry["result"]) {
   if (!active) return;
   history.unshift({
     id: nextId++, zone: active.zone, startedAt: active.startedAt,
-    durationMin: Math.max(1, Math.round(active.durationSec / 60)), result, source: active.source,
+    durationMin: Math.min(active.durationSec, Math.max(0, Math.floor((Date.now() - Date.parse(active.startedAt)) / 1000))) / 60, result, source: active.source,
   });
   active = null;
   const next = queue.shift(); // antrean berikutnya langsung jalan
@@ -99,12 +99,21 @@ export const mockApi: IrrigationApi = {
   async getErrors(limit = 50) { return errors.slice(0, limit); },
   async getSchedule() { return { ...schedule }; },
   async saveSchedule(s) { schedule = { ...s }; emit(); },
-  async startWatering({ zone, durationMin }) {
-    if (zone < 1 || zone > ZONE_COUNT || durationMin < 1 || durationMin > MAX_WATERING_MIN) throw new Error("Perintah tidak valid");
+  async startWatering({ durationMin, zone }) {
+    const seconds = durationMin * 60;
+    if (!Number.isFinite(seconds) || seconds < MIN_WATERING_SEC || seconds > MAX_WATERING_SEC || Math.abs(seconds - Math.round(seconds)) > 0.000001) throw new Error("Durasi harus 30 detik sampai 5 menit per jalur.");
     if (fault.offline) throw new Error("Controller offline, perintah tidak terkirim");
     if (fault.error) throw new Error("Sistem dalam kondisi ERROR, perintah ditolak");
-    if (active) queue.push({ id: `q${nextQueueId++}`, zone, durationMin, source: "manual" }); // interlock: 1 valve saja, sisanya antre
-    else begin(zone, durationMin, "manual");
+    if (zone === undefined && (active || queue.length)) {
+      throw new Error("Selesaikan atau hentikan penyiraman sebelum memulai Semua Jalur.");
+    }
+    if (zone !== undefined && !ZONES.includes(zone)) throw new Error("Jalur penyiraman tidak valid.");
+    const targets = zone === undefined ? ZONES : [zone];
+    queue.push(...targets.map((target): QueueItem => ({ id: `q${nextQueueId++}`, zone: target, durationMin, source: "manual" })));
+    if (!active) {
+      const first = queue.shift()!;
+      begin(first.zone, first.durationMin, first.source);
+    }
     emit();
   },
   async stopWatering() {
@@ -116,7 +125,14 @@ export const mockApi: IrrigationApi = {
     queue = queue.filter((q) => q.id !== id);
     emit();
   },
-  async setMode(m) { mode = m; emit(); },
+  async cancelAllQueued() {
+    queue = [];
+    emit();
+  },
+  async setMode(m) {
+    mode = m;
+    emit();
+  },
   subscribe(fn) {
     listeners.add(fn);
     return () => { listeners.delete(fn); };

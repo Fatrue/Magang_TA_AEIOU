@@ -6,7 +6,6 @@ import { HistoryPage } from "./pages/HistoryPage";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { MorePage } from "./pages/MorePage";
-import { SchedulePage } from "./pages/SchedulePage";
 import { SensorPage } from "./pages/SensorPage";
 import { SystemPage } from "./pages/SystemPage";
 
@@ -20,7 +19,7 @@ function App() {
           <Route path="kontrol" element={<ControlPage />} />
           <Route path="lainnya" element={<MorePage />} />
           <Route path="lainnya/sensor" element={<SensorPage />} />
-          <Route path="lainnya/jadwal" element={<SchedulePage />} />
+          <Route path="lainnya/jadwal" element={<Navigate to="/lainnya" replace />} />
           <Route path="lainnya/riwayat" element={<HistoryPage />} />
           <Route path="lainnya/sistem" element={<SystemPage />} />
         </Route>

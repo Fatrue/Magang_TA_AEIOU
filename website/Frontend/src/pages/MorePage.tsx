@@ -6,7 +6,6 @@ import { useIrrigation } from "../context/IrrigationContext";
 
 const menuItems: { to: string; title: string; detail: string; icon: IconName; tone: string }[] = [
   { to: "/lainnya/sensor", title: "Sensor", detail: "Data sensor dan grafik 24 jam", icon: "sensor", tone: "green" },
-  { to: "/lainnya/jadwal", title: "Jadwal", detail: "Atur jam evaluasi penyiraman", icon: "calendar", tone: "blue" },
   { to: "/lainnya/riwayat", title: "Riwayat", detail: "Riwayat penyiraman per zona", icon: "history", tone: "purple" },
   { to: "/lainnya/sistem", title: "Sistem & Error", detail: "Status perangkat dan log gangguan", icon: "alert", tone: "orange" },
 ];
@@ -19,7 +18,7 @@ export function MorePage() {
   return (
     <main className="page more-page">
       <div className="page-title"><span className="section-kicker">Informasi & pengaturan</span><h2>Lainnya</h2><p>Kelola detail sistem irigasi Anda.</p></div>
-      <div className="system-summary"><div><span className="system-logo"><Icon name="leaf" /></span><div><strong>Kebun BRMP Jakarta</strong><p>{healthy ? "Semua sistem bekerja normal" : "Ada hal yang perlu dicek"}</p></div></div><span className={`healthy ${healthy ? "" : "is-down"}`}><i /> {healthy ? "Sehat" : "Perlu dicek"}</span></div>
+      <div className="system-summary"><div><span className="system-logo"><Icon name="leaf" /></span><div><strong>Kebun BRMP Jakarta</strong><p>{healthy ? "Sistem Online" : "Offline"}</p></div></div><span className={`healthy ${healthy ? "" : "is-down"}`}><i /> {healthy ? "Online" : "Offline"}</span></div>
       <div className="menu-list">
         {menuItems.map((item) => (
           <div key={item.to} className="menu-wrap">

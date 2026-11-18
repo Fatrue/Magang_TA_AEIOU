@@ -1,5 +1,6 @@
 import type { RowDataPacket } from "mysql2";
 import { pool } from "../db.js";
+import { commandDurationSecSql } from "../lib/command-duration.js";
 import type { ActiveWatering, QueueItem, SystemMode, SystemStatus, WateringSource } from "../contract.js";
 import { num, toHhMm, toIso } from "../lib/time.js";
 
@@ -31,15 +32,15 @@ export async function getSystemStatus(): Promise<SystemStatus> {
   // Antrean bukan tabel tersendiri: ia diturunkan dari perintah yang
   // sudah diterima tetapi belum dijalankan perangkat.
   const [queueRows] = await pool.execute<RowDataPacket[]>(
-    `SELECT queue_id, zone_id, duration_min, user_id
+    `SELECT queue_id, zone_id, ${commandDurationSecSql} AS duration_sec, user_id
        FROM control_commands
       WHERE type = 'start' AND outcome = 'queued'
-      ORDER BY created_at`,
+      ORDER BY created_at, id`,
   );
   const queue: QueueItem[] = queueRows.map((r) => ({
     id: String(r.queue_id),
     zone: Number(r.zone_id),
-    durationMin: Number(r.duration_min),
+    durationMin: Number(r.duration_sec) / 60,
     source: (r.user_id === null ? "auto" : "manual") as WateringSource,
   }));
 

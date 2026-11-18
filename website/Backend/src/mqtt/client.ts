@@ -1,6 +1,7 @@
 import mqtt, { type MqttClient } from "mqtt";
 import { env } from "../env.js";
 import { logger } from "../lib/logger.js";
+import { conflict } from "../lib/HttpError.js";
 
 let client: MqttClient | null = null;
 
@@ -9,7 +10,7 @@ export function getMqtt(): MqttClient {
   return client;
 }
 
-export function connectMqtt(onMessage: (topic: string, payload: string) => void, topics: readonly string[]): MqttClient {
+export function connectMqtt(onMessage: (topic: string, payload: string) => Promise<void>, topics: readonly string[]): MqttClient {
   client = mqtt.connect(env.MQTT_URL, {
     username: env.MQTT_USERNAME,
     password: env.MQTT_PASSWORD,
@@ -24,12 +25,11 @@ export function connectMqtt(onMessage: (topic: string, payload: string) => void,
     });
   });
 
+  let inbound: Promise<void> = Promise.resolve();
   client.on("message", (topic, payload) => {
-    try {
-      onMessage(topic, payload.toString("utf8"));
-    } catch (err) {
-      logger.error({ err, topic }, "gagal memproses pesan MQTT");
-    }
+    // Menjaga urutan ON/OFF saat handler melakukan query basis data.
+    inbound = inbound.then(() => onMessage(topic, payload.toString("utf8")))
+      .catch((err) => { logger.error({ err, topic }, "gagal memproses pesan MQTT"); });
   });
 
   client.on("error", (err) => logger.error({ err }, "kesalahan MQTT"));
@@ -38,12 +38,16 @@ export function connectMqtt(onMessage: (topic: string, payload: string) => void,
   return client;
 }
 
-export function publish(topic: string, message: string): void {
-  if (!client) {
-    logger.warn({ topic, message }, "MQTT belum tersambung, pesan tidak diterbitkan");
-    return;
+export async function publish(topic: string, message: string): Promise<void> {
+  if (!client?.connected) {
+    throw conflict("Broker MQTT belum terhubung. Perintah tidak terkirim.");
   }
-  client.publish(topic, message, { qos: 1 }, (err) => {
-    if (err) logger.error({ err, topic }, "gagal menerbitkan ke MQTT");
+  await new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(() => reject(conflict("Pengiriman ke broker belum terkonfirmasi. Periksa perangkat sebelum mencoba lagi.")), 5000);
+    client!.publish(topic, message, { qos: 1 }, (err) => {
+      clearTimeout(timer);
+      if (err) reject(err);
+      else resolve();
+    });
   });
 }

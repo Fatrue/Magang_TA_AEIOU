@@ -2,10 +2,11 @@ import type { RowDataPacket } from "mysql2";
 import { pool } from "../db.js";
 import { env } from "../env.js";
 import { logger } from "../lib/logger.js";
+import { commandDurationSecSql } from "../lib/command-duration.js";
 import type { SystemMode, WateringSource } from "../contract.js";
 import { logError } from "../services/history.service.js";
 import { updateDeviceStatus } from "../services/status.service.js";
-import { wasStopRequested } from "../services/watering.service.js";
+import { dispatchNextQueued, wasStopRequested, withWateringLock } from "../services/watering.service.js";
 import { broadcastSensors, broadcastStatus } from "../realtime/socket.js";
 import { IN } from "./topics.js";
 
@@ -83,14 +84,14 @@ async function openWatering(zone: number): Promise<void> {
 
   // Perintah terkait: yang paling awal mengantre untuk zona ini.
   const [cmds] = await pool.execute<RowDataPacket[]>(
-    `SELECT id, queue_id, duration_min, user_id FROM control_commands
-      WHERE type = 'start' AND zone_id = ? AND outcome IN ('sent','queued')
-      ORDER BY created_at LIMIT 1`,
+    `SELECT id, queue_id, ${commandDurationSecSql} AS duration_sec, user_id FROM control_commands
+      WHERE type = 'start' AND zone_id = ? AND outcome = 'sent'
+      ORDER BY created_at, id LIMIT 1`,
     [zone],
   );
   const cmd = cmds[0];
   const source: WateringSource = cmd && cmd.user_id !== null ? "manual" : "auto";
-  const plannedSec = cmd ? Number(cmd.duration_min) * 60 : 0;
+  const plannedSec = cmd ? Number(cmd.duration_sec) : 0;
 
   await pool.execute(
     `INSERT INTO watering_events
@@ -141,8 +142,14 @@ export async function handleMessage(topic: string, payload: string): Promise<voi
     case IN.activeValve: {
       const zone = Number(text);
       if (!Number.isInteger(zone) || zone < 0 || zone > 13) return;
-      if (zone === 0) await closeWatering();
-      else await openWatering(zone);
+      await withWateringLock(async () => {
+        if (zone === 0) {
+          await closeWatering();
+          await dispatchNextQueued();
+        } else {
+          await openWatering(zone);
+        }
+      });
       broadcastStatus();
       return;
     }

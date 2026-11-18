@@ -2,7 +2,7 @@ import { api } from "../api";
 import { PageHeader } from "../components/PageHeader";
 import { useAsync } from "../hooks/useAsync";
 import { formatDateTime } from "../lib/format";
-import { zoneLabel } from "../lib/zones";
+import { durationLabel, zoneLabel } from "../lib/zones";
 import type { HistoryEntry } from "../types";
 
 const resultLabel: Record<HistoryEntry["result"], { text: string; tone: "ok" | "warn" | "bad" }> = {
@@ -25,7 +25,7 @@ export function HistoryPage() {
           {history.data.map((h) => (
             <div className="row" key={h.id}>
               <span>{formatDateTime(h.startedAt)} · {zoneLabel(h.zone)} · {h.source === "auto" ? "Otomatis" : "Manual"}</span>
-              <strong>{h.durationMin} menit <em className={`pill ${resultLabel[h.result].tone}`}>{resultLabel[h.result].text}</em></strong>
+              <strong>{durationLabel(h.durationMin * 60)} <em className={`pill ${resultLabel[h.result].tone}`}>{resultLabel[h.result].text}</em></strong>
             </div>
           ))}
         </section>

@@ -49,7 +49,7 @@ export function IrrigationProvider({ children }: { children: ReactNode }) {
   const sensorStale = sensors ? now - Date.parse(sensors.receivedAt) > 15 * 60_000 : false;
 
   const remainingSec = status?.active
-    ? Math.max(0, status.active.durationSec - Math.floor((now - Date.parse(status.active.startedAt)) / 1000))
+    ? Math.max(0, status.active.durationSec - Math.max(0, Math.floor((now - Date.parse(status.active.startedAt)) / 1000)))
     : 0;
 
   const alerts = useMemo(() => (status ? buildAlerts(status, sensorStale) : []), [status, sensorStale]);

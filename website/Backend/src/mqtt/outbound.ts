@@ -2,11 +2,11 @@ import type { ControlMode, ScheduleSettings } from "../contract.js";
 import { publish } from "./client.js";
 import { OUT } from "./topics.js";
 
-export function publishStart(zone: number, durationMin: number): void {
+export async function publishStart(zone: number, durationMin: number): Promise<void> {
   // Durasi lebih dulu, baru nomor valve. Kalau terbalik, firmware bisa
   // menerima perintah valve sementara durasi masih bernilai perintah lama.
-  publish(OUT.duration, String(durationMin));
-  publish(OUT.valve, String(zone));
+  await publish(OUT.duration, String(durationMin));
+  await publish(OUT.valve, String(zone));
 }
 
 export const publishStop = () => publish(OUT.stop, "1");

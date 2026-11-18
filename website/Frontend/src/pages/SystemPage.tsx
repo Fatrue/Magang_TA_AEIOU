@@ -2,7 +2,7 @@ import { api } from "../api";
 import { PageHeader } from "../components/PageHeader";
 import { useIrrigation } from "../context/IrrigationContext";
 import { useAsync } from "../hooks/useAsync";
-import { formatDateTime, formatUptime, modeLabel, num } from "../lib/format";
+import { formatDateTime, formatUptime, modeLabel } from "../lib/format";
 
 export function SystemPage() {
   const { status } = useIrrigation();
@@ -17,7 +17,6 @@ export function SystemPage() {
         <div className="row"><span>Mode</span><strong>{modeLabel(status.mode)}</strong></div>
         <div className="row"><span>Uptime</span><strong>{formatUptime(status.uptimeSec)}</strong></div>
         <div className="row"><span>Sinyal WiFi</span><strong>{status.wifiRssi === null ? "—" : `${status.wifiRssi} dBm`}</strong></div>
-        <div className="row"><span>Jadwal berikutnya</span><strong>{status.nextSchedule ?? "—"}</strong></div>
         <div className="row"><span>Antrean</span><strong>{status.queue.length} perintah</strong></div>
       </section>
 

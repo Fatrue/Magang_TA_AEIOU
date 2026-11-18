@@ -52,6 +52,7 @@ export const httpApi: IrrigationApi = {
   startWatering: (cmd) => req("/api/watering", { method: "POST", ...json(cmd) }),
   stopWatering: () => req("/api/watering/stop", { method: "POST" }),
   cancelQueued: (id) => req(`/api/watering/queue/${encodeURIComponent(id)}`, { method: "DELETE" }),
+  cancelAllQueued: () => req("/api/watering/queue", { method: "DELETE" }),
   setMode: (mode) => req("/api/mode", { method: "PUT", ...json({ mode }) }),
   subscribe(fn) {
     const s = getSocket();

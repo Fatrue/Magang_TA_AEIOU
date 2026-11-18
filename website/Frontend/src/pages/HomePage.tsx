@@ -8,10 +8,16 @@ import { airHumidityNote, airTempNote, formatRemaining, minutesAgo, modeLabel, m
 export function HomePage() {
   const { status, sensors, remainingSec, sensorStale } = useIrrigation();
   const navigate = useNavigate();
+  const online = status.online;
   const active = status.active;
-  const watering = active !== null;
+  const activeOnCard = online ? active : null;
+  const watering = activeOnCard !== null;
   const age = minutesAgo(sensors.receivedAt);
-  const heroLabel = status.mode === "error" ? "GANGGUAN SISTEM" : status.mode === "manual" ? "MODE MANUAL" : "SISTEM OTOMATIS";
+  const heroLabel = online ? "SISTEM ONLINE" : "SISTEM OFFLINE";
+  const heroTitle = activeOnCard ? zoneLabel(activeOnCard.zone) : online ? "Siap" : "Offline";
+  const heroDetail = activeOnCard
+    ? `${formatRemaining(remainingSec)} tersisa`
+    : online ? "Tidak ada penyiraman aktif" : "Controller tidak terhubung";
 
   const sensorCards: { label: string; value: string; note: string; icon: IconName; tone: string }[] = [
     { label: "Kelembapan Tanah", value: num(sensors.soilMoisture, 0, "%"), note: moistureNote(sensors.soilMoisture), icon: "droplet", tone: "green" },
@@ -24,19 +30,18 @@ export function HomePage() {
       {status.lastError && <div className="banner bad">Gangguan: {status.lastError}</div>}
       {sensorStale && <div className="banner warn">Data sensor belum diperbarui lebih dari 15 menit.</div>}
 
-      <div className={`hero-card ${watering ? "is-watering" : ""}`}>
+      <div className={`hero-card ${online ? "" : "is-offline"}`}>
         <div className="hero-topline"><span><i /> {heroLabel}</span><Icon name="shield" size={20} /></div>
         <div className="hero-main">
           <div className="water-pulse"><Icon name="droplet" size={30} /></div>
           <div>
             <p className="eyebrow">{watering ? "Sedang menyiram" : "Status saat ini"}</p>
-            <h2>{active ? zoneLabel(active.zone) : "Siap"}</h2>
-            <p>{active ? `${formatRemaining(remainingSec)} tersisa` : "Tidak ada penyiraman aktif"}</p>
+            <h2>{heroTitle}</h2>
+            <p>{heroDetail}</p>
           </div>
         </div>
-        <div className="hero-footer"><Icon name="clock" size={18} /> Penyiraman terjadwal berikutnya <strong>{status.nextSchedule ?? "—"}</strong></div>
         {/* Hanya berubah saat status berubah, bukan tiap detik, supaya screen reader tidak membacakan hitung mundur terus-menerus. */}
-        <p className="sr-only" aria-live="polite">{active ? `Sedang menyiram ${zoneLabel(active.zone)}` : "Tidak ada penyiraman aktif"}</p>
+        <p className="sr-only" aria-live="polite">{activeOnCard ? `Sedang menyiram ${zoneLabel(activeOnCard.zone)}` : `${heroLabel}. ${heroDetail}`}</p>
       </div>
 
       <div className="status-strip">
@@ -55,7 +60,7 @@ export function HomePage() {
               <div>
                 <p>{sensor.label}</p>
                 <strong>{sensorStale ? "—" : sensor.value}</strong>
-                <small>{sensorStale ? "Data tidak segar" : sensor.note}</small>
+                <small>{sensorStale ? "Menunggu data terbaru" : sensor.note}</small>
               </div>
             </article>
           ))}

@@ -66,7 +66,7 @@ CREATE TABLE control_commands (
   user_id       INT UNSIGNED NULL,
   type          ENUM('start','stop','cancel_queue','set_mode','set_schedule') NOT NULL,
   zone_id       TINYINT UNSIGNED NULL,
-  duration_min  SMALLINT UNSIGNED NULL,
+  duration_min  DECIMAL(10,6) UNSIGNED NULL,
   mode          ENUM('auto','manual') NULL,
   queue_id      VARCHAR(36) NULL,
   payload       JSON NULL,

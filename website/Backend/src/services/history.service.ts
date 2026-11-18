@@ -19,7 +19,7 @@ export async function getHistory(limit: number): Promise<HistoryEntry[]> {
     id: Number(r.id),
     zone: Number(r.zone_id),
     startedAt: toIso(r.started_at as Date) ?? new Date(0).toISOString(),
-    durationMin: Math.max(1, Math.round(Number(r.actual_sec ?? r.planned_sec) / 60)),
+    durationMin: Number(r.actual_sec ?? r.planned_sec) / 60,
     result: r.result as HistoryEntry["result"],
     source: r.source as WateringSource,
   }));

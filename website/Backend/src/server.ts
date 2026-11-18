@@ -76,7 +76,7 @@ async function main(): Promise<void> {
   const httpServer = createServer(app);
   initSocket(httpServer);
 
-  connectMqtt((topic, payload) => void handleMessage(topic, payload), SUBSCRIPTIONS);
+  connectMqtt(handleMessage, SUBSCRIPTIONS);
   const watcher = startOfflineWatcher();
 
   httpServer.listen(env.PORT, () => {
